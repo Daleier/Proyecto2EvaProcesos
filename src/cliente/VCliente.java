@@ -5,6 +5,8 @@
  */
 package cliente;
 
+import java.net.URL;
+
 /**
  *
  * @author dam203
@@ -16,6 +18,7 @@ public class VCliente extends javax.swing.JFrame {
      */
     public VCliente() {
         initComponents();
+        this.mostrarURL(jComboBoxURL.getItemAt(0).toString());
     }
 
     /**
@@ -27,22 +30,135 @@ public class VCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jEditorPaneWebBrowser = new javax.swing.JEditorPane();
+        jComboBoxURL = new javax.swing.JComboBox<>();
+        jButtonSearch = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Client");
+        setPreferredSize(new java.awt.Dimension(1200, 600));
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 360));
+
+        jEditorPaneWebBrowser.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
+            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
+                jEditorPaneWebBrowserHyperlinkUpdate(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jEditorPaneWebBrowser);
+
+        jComboBoxURL.setEditable(true);
+        jComboBoxURL.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "https://www.google.es/", "http://localhost:50029", "http://10.42.69.140:50028" }));
+        jComboBoxURL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxURLActionPerformed(evt);
+            }
+        });
+
+        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/ic_search_redim.png"))); // NOI18N
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jComboBoxURL, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBoxURL)
+                    .addComponent(jButtonSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(422, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(190, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jComboBoxURLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxURLActionPerformed
+        String url=(String) this.jComboBoxURL.getEditor().getItem();
+        this.actualizarCombo(url);
+        this.mostrarURL(url);
+    }//GEN-LAST:event_jComboBoxURLActionPerformed
+
+    private void jEditorPaneWebBrowserHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_jEditorPaneWebBrowserHyperlinkUpdate
+        if (evt.getEventType() == javax.swing.event.HyperlinkEvent.EventType.ACTIVATED) {
+            this.mostrarURL(evt.getURL().toString());
+            this.actualizarCombo(evt.getURL().toString());
+            this.jComboBoxURL.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_jEditorPaneWebBrowserHyperlinkUpdate
+
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        String url=(String) this.jComboBoxURL.getEditor().getItem();
+        this.actualizarCombo(url);
+        this.mostrarURL(url);
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
+    private void actualizarCombo(String url) {
+        boolean encontrado = false;
+	for (int k = 0; k < this.jComboBoxURL.getItemCount(); k++) {
+		String item = this.jComboBoxURL.getItemAt(k).toString();
+		if (item.equals(url)) {
+			encontrado = true;
+		}
+	}
+	if (!encontrado) {
+		if (this.jComboBoxURL.getItemCount() == 5) {
+			this.jComboBoxURL.removeItemAt(4);
+		}
+		this.jComboBoxURL.insertItemAt(url, 0);            
+	}
+    }
+     
+    private void mostrarURL(String direcc) {
+        try {
+            URL url = new URL(direcc);
+            this.jEditorPaneWebBrowser.setPage(url);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "alert", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -79,5 +195,10 @@ public class VCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonSearch;
+    private javax.swing.JComboBox<String> jComboBoxURL;
+    private javax.swing.JEditorPane jEditorPaneWebBrowser;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

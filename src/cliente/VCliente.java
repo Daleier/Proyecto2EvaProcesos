@@ -60,7 +60,7 @@ public class VCliente extends javax.swing.JFrame {
             }
         });
 
-        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/ic_search_redim.png"))); // NOI18N
+        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/icons/ic_search_redim.png"))); // NOI18N
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchActionPerformed(evt);

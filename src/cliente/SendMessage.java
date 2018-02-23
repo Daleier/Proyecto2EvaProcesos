@@ -42,13 +42,16 @@ public class SendMessage extends Observable implements Runnable  {
         InputStream flujoLectura;
         DataInputStream flujoDI;
         try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
             socketCliente = new Socket(this.ip, this.puerto);
             flujoSalida = socketCliente.getOutputStream();
             flujo = new DataOutputStream(flujoSalida);
             flujo.writeInt(this.frase.length());
             flujo.writeBytes(this.frase);
+            System.out.println("Fecha/hora de envio: "+dateFormat.format(date) );
             this.setChanged();
-            this.notifyObservers();
+            this.notifyObservers("Fecha/hora de envio: "+dateFormat.format(date) );
             this.clearChanged();
             //Recepción del mensaje
             flujoLectura = socketCliente.getInputStream();
@@ -58,11 +61,9 @@ public class SendMessage extends Observable implements Runnable  {
             flujoDI.readFully(mensaje);
             
             //Mostrar recibido junto la fecha/hora de recepción
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            System.out.println(new String(mensaje)+" Fecha/hora de recepción: "+dateFormat.format(date) + " - 29BPDJ");
+            System.out.println("Fecha/hora de recepción: "+dateFormat.format(date));
             this.setChanged();
-            this.notifyObservers(dateFormat.format(date));
+            this.notifyObservers("Fecha/hora de recepción: "+dateFormat.format(date));
             this.clearChanged();
             socketCliente.close();
         } catch (UnknownHostException e) {

@@ -84,13 +84,13 @@ public class VCliente extends javax.swing.JFrame implements Observer{
         jButton1 = new javax.swing.JButton();
         jLabelMessageIcon = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldIP = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldPort = new javax.swing.JTextField();
+        jTextFieldIP = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Client");
-        setPreferredSize(new java.awt.Dimension(1250, 635));
+        setPreferredSize(new java.awt.Dimension(1325, 645));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -302,20 +302,15 @@ public class VCliente extends javax.swing.JFrame implements Observer{
 
         jLabelMessageIcon.setMaximumSize(new java.awt.Dimension(128, 128));
         jLabelMessageIcon.setMinimumSize(new java.awt.Dimension(128, 128));
-        jLabelMessageIcon.setPreferredSize(new java.awt.Dimension(128, 128));
+        jLabelMessageIcon.setPreferredSize(new java.awt.Dimension(135, 135));
 
         jLabel3.setText("IP:");
-
-        jTextFieldIP.setText("10.42.69.141");
-        jTextFieldIP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldIPActionPerformed(evt);
-            }
-        });
 
         jLabel4.setText("Port:");
 
         jTextFieldPort.setText("50030");
+
+        jTextFieldIP.setText("10.42.69.141");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -325,14 +320,14 @@ public class VCliente extends javax.swing.JFrame implements Observer{
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14)
-                .addComponent(jLabelMessageIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelMessageIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
+                .addGap(67, 67, 67)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -353,9 +348,9 @@ public class VCliente extends javax.swing.JFrame implements Observer{
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
-                        .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
-                        .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -456,10 +451,6 @@ public class VCliente extends javax.swing.JFrame implements Observer{
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextFieldIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldIPActionPerformed
-
     private void actualizarCombo(String url) {
         boolean encontrado = false;
 	for (int k = 0; k < this.jComboBoxURL.getItemCount(); k++) {
@@ -490,13 +481,13 @@ public class VCliente extends javax.swing.JFrame implements Observer{
         if(waiting){
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/icons/sending.png")));
+                    jLabelMessageIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/icons/sending.png")));
                 }
             });
         }else{
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/icons/done.png")));
+                    jLabelMessageIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente/icons/done.png")));
                 }
             });                
         }
@@ -611,7 +602,7 @@ public class VCliente extends javax.swing.JFrame implements Observer{
                 changeSendingImage(waiting);
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {   
-                        jTextAreaMessage.append(o1.toString());
+                        jTextAreaMessage.append("\n"+o1.toString());
                     }
                 });
                 break;

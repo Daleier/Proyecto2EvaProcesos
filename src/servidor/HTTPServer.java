@@ -1,68 +1,44 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package servidor;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class HTTPServer extends Observable implements Runnable{
+/**
+ *
+ * @author dam203
+ */
+public class HTTPServer implements Runnable {
+    boolean fin;
+    public final ServerSocket socketServidor;
+    public final ExecutorService pool;
+    public final Observer o;
     
+    public HTTPServer(int port, int poolSize, Observer o) throws IOException {
+        fin = false;
+        this.socketServidor = new ServerSocket(port);
+        this.pool = Executors.newFixedThreadPool(poolSize);
+	this.o=o;
+    }
+    
+    @Override
     public void run() {
-        Socket comunicaCliente;
-        ServerSocket socketServidor;
-        OutputStream flujoSalida;
-        DataOutputStream flujo;
         try {
-            socketServidor = new ServerSocket(50029);
-            comunicaCliente = socketServidor.accept();
-            flujoSalida = comunicaCliente.getOutputStream();
-            flujo = new DataOutputStream(flujoSalida);
-
-            String paginaWeb = "HTTP/1.0 200 OK\r\n Connection: close\r\nServer: ServidorWebModuloPSP v0\r\nContent-Type: text/html\r\n\r\n·"
-                    +obtenerArchivoHTML("index.html");
-
-            flujo.writeBytes(paginaWeb);
-            flujo.flush();
-            //Se va a dormir el proceso para que no termine antes de que el 
-            //cliente pueda procesar los datos.
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(HTTPServer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            comunicaCliente.close();
+            do {
+		HandlerHTTPServer h= new HandlerHTTPServer(socketServidor.accept());
+                h.addObserver(o);
+		pool.execute(h);
+            } while (!fin);
             socketServidor.close();
         } catch (IOException e) {
-        } catch (SecurityException e) {
+            System.out.println("Error en las comunicaciones");
         }
     }
-    
-    private String obtenerArchivoHTML(String nombre) {
-	String resultado = "";
-	BufferedReader in = null;
-	try {
-            in = new BufferedReader(new FileReader(nombre));
-            try {
-                    String linea=in.readLine();
-                    while (linea!=null){
-                            resultado+=linea;
-                            linea=in.readLine();
-                    }
-                    in.close();
-            } catch (IOException e) {
-                    System.err.println("IOException occurred in server.");
-            }
-	} catch (FileNotFoundException e) {
-		System.err.println("Could not open quote file.");
-	}
-	return resultado;
-    }
-
 }

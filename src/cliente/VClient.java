@@ -477,6 +477,7 @@ public class VClient extends javax.swing.JFrame implements Observer{
         try {
             URL url = new URL(direcc);
             this.jEditorPaneWebBrowser.setPage(url);
+            System.out.println("Loading: "+ url.toString());
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "alert", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -592,10 +593,12 @@ public class VClient extends javax.swing.JFrame implements Observer{
                         URL url;
                         Date date = new Date();
                         try {
-                            url = new URL(o1.toString());
-                            BufferedImage image = ImageIO.read(url);
-                            jLabelBanner.setIcon(new ImageIcon(image));
-                            jLabelBannerTime.setText(date.toString());
+                            if(!o1.toString().equalsIgnoreCase("No more quotes. Goodbye.")){
+                                url = new URL(o1.toString());
+                                BufferedImage image = ImageIO.read(url);
+                                jLabelBanner.setIcon(new ImageIcon(image));
+                                jLabelBannerTime.setText(date.toString());                                
+                            }
                         } catch (MalformedURLException ex) {
                             Logger.getLogger(GetBanners.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IOException ex){

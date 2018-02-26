@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +29,11 @@ public class HandlerHTTPServer extends Observable implements Runnable{
         try {
             flujoSalida = comunicaCliente.getOutputStream();
             flujo = new DataOutputStream(flujoSalida);
-
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            this.setChanged();
+            this.notifyObservers(dateFormat.format(date)+" - "+comunicaCliente.getInetAddress().getHostAddress());
+            this.clearChanged();
             String paginaWeb = "HTTP/1.0 200 OK\r\n Connection: close\r\nServer: ServidorWebModuloPSP v0\r\nContent-Type: text/html\r\n\r\n·"
                     +obtenerArchivoHTML("index.html");
             flujo.writeBytes(paginaWeb);

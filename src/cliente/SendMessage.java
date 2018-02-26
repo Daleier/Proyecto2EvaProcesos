@@ -50,9 +50,11 @@ public class SendMessage extends Observable implements Runnable  {
             flujo.writeInt(this.frase.length());
             flujo.writeBytes(this.frase);
             System.out.println("Fecha/hora de envio: "+dateFormat.format(date) );
+            
             this.setChanged();
             this.notifyObservers("Fecha/hora de envio: "+dateFormat.format(date) );
             this.clearChanged();
+            
             //Recepción del mensaje
             flujoLectura = socketCliente.getInputStream();
             flujoDI = new DataInputStream(flujoLectura);
@@ -61,6 +63,7 @@ public class SendMessage extends Observable implements Runnable  {
             flujoDI.readFully(mensaje);
             
             //Mostrar recibido junto la fecha/hora de recepción
+            date = new Date();
             System.out.println("Fecha/hora de recepción: "+dateFormat.format(date));
             this.setChanged();
             this.notifyObservers("Fecha/hora de recepción: "+dateFormat.format(date));

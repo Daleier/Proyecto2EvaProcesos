@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,13 +21,19 @@ public class VServer extends javax.swing.JFrame implements Observer{
     /**
      * Creates new form VServidor
      */
+    protected DefaultTableModel dtm;
+        
     public VServer() {
+        dtm = this.setTableModel();
         initComponents();
         
         //inicializa servidor http
         HTTPServer httpserv = new HTTPServer();
         httpserv.addObserver(this);
         new Thread(httpserv).start();
+        MulticastServer multicast = new MulticastServer();
+        multicast.addObserver(this);
+        new Thread(multicast).start();
     }
 
     /**
@@ -44,6 +51,8 @@ public class VServer extends javax.swing.JFrame implements Observer{
         jTextFieldPort = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaMessage = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Server");
@@ -74,32 +83,42 @@ public class VServer extends javax.swing.JFrame implements Observer{
         jTextAreaMessage.setRows(5);
         jScrollPane1.setViewportView(jTextAreaMessage);
 
+        jTable1.setModel(dtm);
+        jScrollPane2.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabelPort)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
+                        .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonStarTCPMessage)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonStarTCPMessage)
-                    .addComponent(jLabelPort)
-                    .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonStarTCPMessage)
+                            .addComponent(jLabelPort)
+                            .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -109,15 +128,15 @@ public class VServer extends javax.swing.JFrame implements Observer{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(328, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap(281, Short.MAX_VALUE))
         );
 
         pack();
@@ -130,6 +149,8 @@ public class VServer extends javax.swing.JFrame implements Observer{
                 int portnumber = Integer.parseInt(jTextFieldPort.getText().trim());
                 TCPMessage tcpmsg = new TCPMessage(portnumber,5,this);
                 new Thread(tcpmsg).start();
+                jButtonStarTCPMessage.setEnabled(false);
+                jButtonStarTCPMessage.setText("TCP server running");
             } catch (IOException ex) {
                 Logger.getLogger(VServer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -141,6 +162,11 @@ public class VServer extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldPortActionPerformed
 
+    public final DefaultTableModel setTableModel() {
+        String[] columnNames = {"Message","Received Time","Origin IP", "Origin port","Answer Time"};
+        return (new DefaultTableModel(columnNames,0));
+    }
+        
     /**
      * @param args the command line arguments
      */
@@ -180,17 +206,14 @@ public class VServer extends javax.swing.JFrame implements Observer{
     @Override
     public void update(Observable o, Object o1) {
         switch (o.getClass().getSimpleName()){
-            case "HHTPServer":
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-
-                    }
-                });                
-                break;
             case "HandlerTCPMessage":
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        jTextAreaMessage.append(o1.toString()+"\n");
+                        if(!o1.getClass().isArray()){
+                            jTextAreaMessage.append(o1.toString()+"\n");   
+                        }else{
+                            dtm.addRow((Object[]) o1);
+                        }
                     }
                 });                
                 break;
@@ -202,6 +225,8 @@ public class VServer extends javax.swing.JFrame implements Observer{
     private javax.swing.JLabel jLabelPort;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextAreaMessage;
     private javax.swing.JTextField jTextFieldPort;
     // End of variables declaration//GEN-END:variables

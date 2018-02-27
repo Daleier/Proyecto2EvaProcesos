@@ -51,11 +51,11 @@ public class Scraping extends Observable implements Runnable {
                     }
                 }catch(IndexOutOfBoundsException ex){}
                 if(titulares.get(a).attr("href").toString().startsWith("http")){
-                    result = result + "<br/><a href=\"" + titulares.get(a).attr("href").toString()+"\">"+titulares.get(a).text()+ "<a/><br/>";
-                    System.out.println("<br/><a href=\"" + titulares.get(a).attr("href").toString()+">"+titulares.get(a).text()+ "<a/><br/>");
+                    result = result + "<br/><b><a href=\"" + titulares.get(a).attr("href").toString()+"\">"+titulares.get(a).text()+ "<a/><b/><br/>";
+                    System.out.println("<br/><b><a href=\"" + titulares.get(a).attr("href").toString()+">"+titulares.get(a).text()+ "<a/><b/><br/>");
                 }else{
-                    result = result + "<br/><a href=\"https://elpais.com" + titulares.get(a).attr("href").toString()+"\">"+titulares.get(a).text()+ "<a/><br/>";
-                    System.out.println("<br/><a href=\"https://elpais.com" + titulares.get(a).attr("href").toString()+">"+titulares.get(a).text()+ "<a/><br/>");
+                    result = result + "<br/><b><a href=\"https://elpais.com" + titulares.get(a).attr("href").toString()+"\">"+titulares.get(a).text()+ "<a/><b/><br/>";
+                    System.out.println("<br/><b><a href=\"https://elpais.com" + titulares.get(a).attr("href").toString()+">"+titulares.get(a).text()+ "<a/><b/><br/>");
                 }
             }
             this.setChanged();

@@ -90,7 +90,7 @@ public class HandlerHTTPServer extends Observable implements Runnable{
             Elements tit = doc.getElementsByTag("meta");
 
             for(Element link: tit){
-                if(link.attr("itemprop").toString().equalsIgnoreCase("url")){
+                if(link.attr("itemprop").toString().equalsIgnoreCase("url") && link.attr("content").toString().contains(".jpg")){
                     resultado = resultado + "<br/><img src=\"" + link.attr("content").toString()+"\"><br/>";
                 }
             }

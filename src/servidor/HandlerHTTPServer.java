@@ -1,5 +1,6 @@
 package servidor;
 
+import cliente.Scraping;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +15,10 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class HandlerHTTPServer extends Observable implements Runnable{
     
@@ -35,7 +40,8 @@ public class HandlerHTTPServer extends Observable implements Runnable{
             this.notifyObservers(dateFormat.format(date)+" - "+comunicaCliente.getInetAddress().getHostAddress());
             this.clearChanged();
             String paginaWeb = "HTTP/1.0 200 OK\r\n Connection: close\r\nServer: ServidorWebModuloPSP v0\r\nContent-Type: text/html\r\n\r\n·"
-                    +obtenerArchivoHTML("index.html");
+                    /*+obtenerArchivoHTML("index.html")*/+scrapping();
+            System.out.println(paginaWeb);
             flujo.writeBytes(paginaWeb);
             flujo.flush();
             //Se va a dormir el proceso para que no termine antes de que el 
@@ -70,6 +76,29 @@ public class HandlerHTTPServer extends Observable implements Runnable{
 		System.err.println("Could not open quote file.");
 	}
 	return resultado;
+    }
+    
+    private String scrapping() {
+        String resultado = "";
+        try {
+            System.out.println("scrapping http");
+            String url = "https://elpais.com/";
+            System.out.println("Fetching %s..."+ url);
+            
+            Document doc;
+            doc = Jsoup.connect(url).get();
+            Elements tit = doc.getElementsByTag("meta");
+
+            for(Element link: tit){
+                if(link.attr("itemprop").toString().equalsIgnoreCase("url")){
+                    resultado = resultado + "<br/><img src=\"" + link.attr("content").toString()+"\"><br/>";
+                }
+            }
+            System.out.println("SCRAP DONE");
+        } catch (IOException ex) {
+            Logger.getLogger(HandlerHTTPServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "<br/><h1>IMÁGENES EL PAÍS<h1/>"+resultado;
     }
 
 }

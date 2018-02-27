@@ -2,9 +2,11 @@ package servidor;
 
 import cliente.Scraping;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -25,6 +27,7 @@ public class HandlerHTTPServer extends Observable implements Runnable{
         Socket comunicaCliente;
         OutputStream flujoSalida;
         DataOutputStream flujo;
+        private final String NOMBREHTML ="index.html";
         
     HandlerHTTPServer(Socket comunicaCliente){
         this.comunicaCliente = comunicaCliente;
@@ -39,8 +42,9 @@ public class HandlerHTTPServer extends Observable implements Runnable{
             this.setChanged();
             this.notifyObservers(dateFormat.format(date)+" - "+comunicaCliente.getInetAddress().getHostAddress());
             this.clearChanged();
+            scrapping(NOMBREHTML);
             String paginaWeb = "HTTP/1.0 200 OK\r\n Connection: close\r\nServer: ServidorWebModuloPSP v0\r\nContent-Type: text/html\r\n\r\n·"
-                    /*+obtenerArchivoHTML("index.html")*/+scrapping();
+                    +obtenerArchivoHTML(NOMBREHTML);
             System.out.println(paginaWeb);
             flujo.writeBytes(paginaWeb);
             flujo.flush();
@@ -78,8 +82,8 @@ public class HandlerHTTPServer extends Observable implements Runnable{
 	return resultado;
     }
     
-    private String scrapping() {
-        String resultado = "";
+    private void scrapping(String nombre) {
+        String resultado = "<html> <head> </head><body><br/><h1>IMAGENES EL PAIS<h1/>";
         try {
             System.out.println("scrapping http");
             String url = "https://elpais.com/";
@@ -94,11 +98,19 @@ public class HandlerHTTPServer extends Observable implements Runnable{
                     resultado = resultado + "<br/><img src=\"" + link.attr("content").toString()+"\"><br/>";
                 }
             }
+            resultado = resultado + "</body> </html>";
             System.out.println("SCRAP DONE");
         } catch (IOException ex) {
             Logger.getLogger(HandlerHTTPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "<br/><h1>IMÁGENES EL PAÍS<h1/>"+resultado;
+        BufferedWriter out;
+            try {
+                out = new BufferedWriter(new FileWriter(nombre));
+                out.write(resultado);
+                out.close();
+            } catch (IOException e) {
+                    System.err.println("IOException occurred in server.");
+            }
     }
 
 }
